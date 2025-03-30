@@ -1,9 +1,11 @@
 import numpy as np
 from numpy.typing import NDArray
 from scipy.sparse import spmatrix, diags
-from scipy.sparse.linalg import svds
+from scipy.sparse.linalg import svds, LinearOperator
+from typing import Union
 from .mean_center_operator import MeanCenterOperator
 from .residual_projection_operator import ResidualProjectionOperator
+from .stacked_linear_operator import StackedLinearOperator
 class IPCAS:
     def __init__(self,
                  n_components:int,
@@ -17,10 +19,14 @@ class IPCAS:
         self.components_ = None  ## = V', (k x p)
         self.explained_variance_ = None
         self.explained_variance_ratio_ = None
-    def partial_fit(self, X:spmatrix):
+    def partial_fit(self, X:Union[spmatrix, LinearOperator], use_stack:bool=True):
         mco = MeanCenterOperator(X, mu=self.mean_, std=self.std_)
         if self.components_ is None:
             _, s, Vt = svds(mco, self.n_components_, which="LM")
+        elif use_stack:
+            _, s, Vt = svds(StackedProjectionOperator(mco,
+                                                      diags(self.singular_values_) @ self.components_),
+                            self.n_components_, which="LM")
         else:
             _, R_s, R_Vt = svds(ResidualProjectionOperator(mco, self.components_.T),
                                 self.n_components_, which="LM")

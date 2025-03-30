@@ -1,3 +1,4 @@
 from .mean_center_operator import MeanCenterOperator
 from .residual_projection_operator import ResidualProjectionOperator
+from .stacked_linear_operator import StackedLinearOperator
 from .ipcas import IPCAS

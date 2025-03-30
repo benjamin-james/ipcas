@@ -20,7 +20,8 @@ dependencies = [
 
 [project.optional-dependencies]
 testing = [
-    "pytest"
+    "pytest",
+    "scikit-learn"
 ]
 docs = [
     "sphinx"

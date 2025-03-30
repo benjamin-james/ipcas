@@ -2,9 +2,10 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.sparse import spmatrix, diags
 from scipy.sparse.linalg import LinearOperator
+from typing import Union
 
 class MeanCenterOperator(LinearOperator):
-    def __init__(self, X:spmatrix, mu:NDArray[np.float64], std:NDArray[np.float64], epsilon:float=1e-300):
+    def __init__(self, X:Union[spmatrix, LinearOperator], mu:NDArray[np.float64], std:NDArray[np.float64], epsilon:float=1e-300):
         self.X = X
         self.mu = np.ravel(mu).reshape(1, -1)
         self.inv_std = np.ravel(1. / np.clip(std, epsilon, np.inf).astype(np.float64))
