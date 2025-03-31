@@ -24,8 +24,8 @@ class IPCAS:
         if self.components_ is None:
             _, s, Vt = svds(mco, self.n_components_, which="LM")
         elif use_stack:
-            _, s, Vt = svds(StackedProjectionOperator(mco,
-                                                      diags(self.singular_values_) @ self.components_),
+            _, s, Vt = svds(StackedLinearOperator(mco,
+                                                  diags(self.singular_values_) @ self.components_),
                             self.n_components_, which="LM")
         else:
             _, R_s, R_Vt = svds(ResidualProjectionOperator(mco, self.components_.T),
