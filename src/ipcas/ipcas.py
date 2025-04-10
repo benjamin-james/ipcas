@@ -38,7 +38,7 @@ class IPCAS:
         self.singular_values_ = s[idx]
         self.components_ = Vt[idx, :]
         self.explained_variance_ = self.singular_values_ ** 2 / (self.n_samples_seen_ - 1)
-        self.explained_variance_ratio_ = self.singular_values_ ** 2 / np.sum(np.ones_like(self.std_) ** 2 * self.n_samples_seen_)
+        self.explained_variance_ratio_ = self.singular_values_ ** 2 / np.sum(np.sum(self.std_ > 0) ** 2 * self.n_samples_seen_)
     def transform(self, X:spmatrix):
         if self.components_ is None:
             raise ValueError("Error: Not fitted yet")
